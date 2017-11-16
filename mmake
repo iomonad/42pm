@@ -1,9 +1,12 @@
 #!/bin/bash
 
+tmp=tmp
+
 ./parser.py Makefile
-makefile=`cat out`
+makefile=`cat $tmp`
 files=`ls *.c | tr '\n' ' '`
 dir=`basename $(pwd)`
+rm $tmp
 
 makefile="${makefile/ofiles/$files}"
 echo "${makefile/odir/$dir}" 
