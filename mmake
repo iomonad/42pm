@@ -1,9 +1,9 @@
 #!/bin/bash
 
-makefile=`cat ~/42/Makefile`
+./parser.py Makefile
+makefile=`cat out`
 files=`ls *.c | tr '\n' ' '`
 dir=`basename $(pwd)`
 
 makefile="${makefile/ofiles/$files}"
-
 echo "${makefile/odir/$dir}" 

@@ -6,6 +6,8 @@
 *.o
 *.pm.tdy
 *.bs
+#vim crottes
+.*.sw*
 
 # Devel::Cover
 cover_db/
