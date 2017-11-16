@@ -1,4 +1,5 @@
-#!/usr/bin/python2
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 #
 #	DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
 #                    Version 2, December 2004
@@ -14,4 +15,33 @@
 # 
 #   0. You just DO WHAT THE FUCK YOU WANT TO.
 
+import os
+import argparse
+from threading import Thread
 
+parser = argparse.ArgumentParser(description='Scaffold 42 projects.')
+parser.add_argument('--projects', dest='project', action='store',
+                    required=True,
+                    help='Select project to scaffold')
+parser.add_argument('--libft', dest='libft', action='store',
+                    help='Select the libft to use.')
+parser.add_argument('--outdir', dest='outdir', action='store',
+                    required=True,
+                    help='Path to scaffold project')
+parser.add_argument('--list', action='store',
+                    help='Show list of available projects.')
+parser.add_argument('--version', action='version', version='%(prog)s 1.0')
+
+class Scaffolder(Thread):
+    def __init__(self, args):
+        Thread.__init__(self)
+        self.args = args
+    def mkdir(self):
+        if not os.path.exists(args.outdir):
+            os.makedirs(args.outdir)
+        
+
+if __name__ == '__main__':
+    args = parser.parse_args()
+    scaff = Scaffolder(args)
+    scaff.mkdir()
