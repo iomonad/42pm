@@ -27,6 +27,9 @@ parser.add_argument('--projects','-p', dest='project', action='store',
 parser.add_argument('--libft', '-l', dest='libft', action='store',
                     required=True, type=str,
                     help='Select the libft to use from Github. Ex: <username>/<libftrepo>')
+parser.add_argument('--user', '-u', dest='user', action='store',
+                    required=True, type=str,
+                    help='Your user name.')
 parser.add_argument('--ssh', '-s', dest='ssh', action="store_true", default=False,
                     help='Use ssh instead https.')
 parser.add_argument('--outdir', '-o', dest='outdir', action='store',
@@ -38,6 +41,16 @@ parser.add_argument('--config', '-c', action='store', dest='config',
                     help='Use configuration file.')
 parser.add_argument('--version', action='version', version='%(prog)s 1.0')
 
+class c:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 class Scaffolder(Thread):
     def __init__(self, args):
         Thread.__init__(self)
@@ -46,8 +59,18 @@ class Scaffolder(Thread):
     def mkdir(self):
         if not os.path.exists(args.outdir):
             os.makedirs(args.outdir)
+            print c.OKBLUE + "[OK] Created project directory: " + c.ENDC + args.outdir
+        else:
+            print c.FAIL + "[ERR] Output folder ({}) exists. ".format(args.outdir) + c.ENDC
+            sys.exit(0)
+    def author(self):
+        os.chdir(args.outdir)
+        with open("author",'w') as f:
+            f.write(args.user + '\n')
+        os.chdir("..")
     def run(self):
         self.mkdir()
+        self.author()
         self.fetch.libftfetch()
 
 class Fetcher(Thread):
@@ -60,7 +83,8 @@ class Fetcher(Thread):
         else:
             t = "http://github.com/{}".format(args.libft)
         os.chdir(args.outdir)
-        subprocess.call(["git", "clone", "--depth=1", str(t)])
+        subprocess.call(["git", "clone", "--depth=1", str(t)], stdout=subprocess.PIPE)
+        print c.OKBLUE + "[OK] Cloned libft to dir:  " + c.ENDC + args.outdir
         os.chdir("..")
             
 if __name__ == '__main__':
