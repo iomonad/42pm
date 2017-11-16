@@ -1,5 +1,5 @@
 # 42pm - 42 project manager 
-
+## Fast scaffolding your 42 projects. 
 ```bash
 $ python 42pm -h
 usage: 42pm [-h] --projects {fillit} --libft LIBFT --user USER [--ssh]
