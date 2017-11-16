@@ -20,9 +20,11 @@ import argparse
 from threading import Thread
 import subprocess
 
+projects = [ "fillit" ]
+
 parser = argparse.ArgumentParser(description='Scaffold 42 projects.')
 parser.add_argument('--projects','-p', dest='project', action='store',
-                    required=True,
+                    required=True, choices=projects,
                     help='Select project to scaffold')
 parser.add_argument('--libft', '-l', dest='libft', action='store',
                     required=True, type=str,
@@ -68,6 +70,8 @@ class Scaffolder(Thread):
         with open("author",'w') as f:
             f.write(args.user + '\n')
         os.chdir("..")
+    def templates(self):
+        pass
     def run(self):
         self.mkdir()
         self.author()
@@ -83,8 +87,12 @@ class Fetcher(Thread):
         else:
             t = "http://github.com/{}".format(args.libft)
         os.chdir(args.outdir)
-        subprocess.call(["git", "clone", "--depth=1", str(t)], stdout=subprocess.PIPE)
-        print c.OKBLUE + "[OK] Cloned libft to dir:  " + c.ENDC + args.outdir
+        try:
+            with open(os.devnull, 'wb') as dnl:
+                subprocess.check_call(["git", "clone", "--depth=1", str(t)], stdout=dnl)
+            print c.OKBLUE + "[OK] Cloned libft to dir:  " + c.ENDC + args.outdir
+        except Exception as e:
+            print c.FAIL + "[ERR] Error while cloning repo to dir:  " + c.ENDC + str(e)
         os.chdir("..")
             
 if __name__ == '__main__':
