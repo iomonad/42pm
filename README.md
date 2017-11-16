@@ -1,4 +1,4 @@
-# 42pm
+# 42pm - 42 project manager 
 
 ```bash
 $ python 42pm -h
